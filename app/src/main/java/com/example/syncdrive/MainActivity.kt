@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rvSignFeed: RecyclerView
     private lateinit var signFeedAdapter: SignFeedAdapter
 
+    // Feature 6 Variables
+    private lateinit var tvDestination: TextView
+    private lateinit var navigationController: NavigationController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Configuration.getInstance().userAgentValue = packageName
@@ -80,7 +84,14 @@ class MainActivity : AppCompatActivity() {
         signFeedAdapter = SignFeedAdapter(mutableListOf())
         rvSignFeed.adapter = signFeedAdapter
 
+        // Setup Feature 6 (Set Destination)
+        tvDestination = findViewById(R.id.tvDestination)
+        navigationController = NavigationController(mapView, tvDestination)
+
+        // Activate the long-press listener
+        navigationController.enableMapClickToSetDestination()
         // Start mock data
+
         simulateRealTimeUpdates()
     }
 
