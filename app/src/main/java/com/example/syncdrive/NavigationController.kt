@@ -9,7 +9,8 @@ import org.osmdroid.views.overlay.Marker
 
 class NavigationController(
     private val mapView: MapView,
-    private val tvDestination: TextView
+    private val tvDestination: TextView,
+    private val onDestinationSet: (GeoPoint) -> Unit
 ) {
     private var destinationMarker: Marker? = null
     var currentTarget: NavigationTarget? = null
@@ -25,6 +26,7 @@ class NavigationController(
                 p?.let {
                     val target = NavigationTarget(it.latitude, it.longitude)
                     updateDestination(target)
+                    onDestinationSet(it)
                 }
                 return true
             }

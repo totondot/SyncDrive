@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,12 @@ class MainActivity : AppCompatActivity() {
     // Feature 6 Variables
     private lateinit var tvDestination: TextView
     private lateinit var navigationController: NavigationController
+
+    // Feature 7 Variables
+    private lateinit var tvRouteInfo: TextView
+    private lateinit var routeController: RouteController
+
+    private val carCurrentLocation = GeoPoint(23.8103, 90.4125)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,23 +81,19 @@ class MainActivity : AppCompatActivity() {
         signFeedAdapter = SignFeedAdapter(mutableListOf())
         rvSignFeed.adapter = signFeedAdapter
 
-        simulateRealTimeUpdates()// Setup Feature 5 (Road Sign Feed)
-        rvSignFeed = findViewById(R.id.rvSignFeed)
-
-        // Make it scroll horizontally
-        rvSignFeed.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        // Initialize adapter with an empty list
-        signFeedAdapter = SignFeedAdapter(mutableListOf())
-        rvSignFeed.adapter = signFeedAdapter
-
         // Setup Feature 6 (Set Destination)
         tvDestination = findViewById(R.id.tvDestination)
-        navigationController = NavigationController(mapView, tvDestination)
-
+        navigationController = NavigationController(mapView, tvDestination) { destinationGeoPoint ->
+            // This block runs automatically whenever the user long-presses the map!
+            routeController.calculateAndDrawRoute(carCurrentLocation, destinationGeoPoint)
+        }
         // Activate the long-press listener
         navigationController.enableMapClickToSetDestination()
         // Start mock data
+
+        // Setup Feature 7 (Routing & ETA)
+        tvRouteInfo = findViewById(R.id.tvRouteInfo)
+        routeController = RouteController(mapView, tvRouteInfo)
 
         simulateRealTimeUpdates()
     }
