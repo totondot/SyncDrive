@@ -102,6 +102,20 @@
             android:textStyle="bold"
             android:gravity="center"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSummon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomPanel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="SUMMON CAR"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="6dp" />
+
     <LinearLayout
         android:id="@+id/destinationPanel"
         android:layout_width="wrap_content"

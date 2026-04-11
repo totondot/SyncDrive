@@ -2,6 +2,7 @@ package com.example.syncdrive
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.osmdroid.config.Configuration
@@ -45,6 +46,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var routeController: RouteController
 
     private val carCurrentLocation = GeoPoint(23.8103, 90.4125)
+    private val userCurrentLocation = GeoPoint(23.8041, 90.4152)
+
+    // Feature 8 Variables
+    private lateinit var btnSummon: Button
+    private lateinit var summonController: SummonController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +101,15 @@ class MainActivity : AppCompatActivity() {
         tvRouteInfo = findViewById(R.id.tvRouteInfo)
         routeController = RouteController(mapView, tvRouteInfo)
 
+        // Setup Feature 8 (Summon Command)
+        btnSummon = findViewById(R.id.btnSummon)
+
+        // We pass in the routeController we already created in Feature 7!
+        summonController = SummonController(btnSummon, routeController)
+
+        // Activate the button logic
+        summonController.setupSummonButton(carCurrentLocation, userCurrentLocation)
+        
         simulateRealTimeUpdates()
     }
 
