@@ -2,10 +2,12 @@ package com.example.syncdrive
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +36,29 @@ class MainActivity : AppCompatActivity() {
     // Feature 5 Variables
     private lateinit var rvSignFeed: RecyclerView
     private lateinit var signFeedAdapter: SignFeedAdapter
+
+    // Feature 6 Variables
+    private lateinit var tvDestination: TextView
+    private lateinit var navigationController: NavigationController
+
+    // Feature 7 Variables
+    private lateinit var tvRouteInfo: TextView
+    private lateinit var routeController: RouteController
+
+    private val carCurrentLocation = GeoPoint(23.8103, 90.4125)
+    private val userCurrentLocation = GeoPoint(23.8041, 90.4152)
+
+    // Feature 8 Variables
+    private lateinit var btnSummon: Button
+    private lateinit var summonController: SummonController
+
+    // Feature 9 Variables
+    private lateinit var btnDoorLock: Button
+    private lateinit var doorController: DoorController
+
+    // Feature 10 Variables
+    private lateinit var btnEmergencyStop: Button
+    private lateinit var emergencyController: EmergencyController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,17 +95,42 @@ class MainActivity : AppCompatActivity() {
         signFeedAdapter = SignFeedAdapter(mutableListOf())
         rvSignFeed.adapter = signFeedAdapter
 
-        simulateRealTimeUpdates()// Setup Feature 5 (Road Sign Feed)
-        rvSignFeed = findViewById(R.id.rvSignFeed)
+        // Setup Feature 6 (Set Destination)
+        tvDestination = findViewById(R.id.tvDestination)
+        navigationController = NavigationController(mapView, tvDestination) { destinationGeoPoint ->
+            // This block runs automatically whenever the user long-presses the map!
+            routeController.calculateAndDrawRoute(carCurrentLocation, destinationGeoPoint)
+        }
 
-        // Make it scroll horizontally
-        rvSignFeed.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        // Initialize adapter with an empty list
-        signFeedAdapter = SignFeedAdapter(mutableListOf())
-        rvSignFeed.adapter = signFeedAdapter
-
+        // Activate the long-press listener
+        navigationController.enableMapClickToSetDestination()
         // Start mock data
+
+        // Setup Feature 7 (Routing & ETA)
+        tvRouteInfo = findViewById(R.id.tvRouteInfo)
+        routeController = RouteController(mapView, tvRouteInfo)
+
+        // Setup Feature 8 (Summon Command)
+        btnSummon = findViewById(R.id.btnSummon)
+
+        // We pass in the routeController we already created in Feature 7!
+        summonController = SummonController(btnSummon, routeController)
+
+        // Activate the button logic
+        summonController.setupSummonButton(carCurrentLocation, userCurrentLocation)
+
+        // Setup Feature 9 (Door Locks)
+        btnDoorLock = findViewById(R.id.btnDoorLock)
+        doorController = DoorController(btnDoorLock)
+        doorController.setupDoorControls()
+
+        // Setup Feature 10 (Emergency Stop)
+        btnEmergencyStop = findViewById(R.id.btnEmergencyStop)
+
+        // Pass in the routeController so the E-Stop can cancel the map routes
+        emergencyController = EmergencyController(btnEmergencyStop, routeController)
+        emergencyController.setupEmergencySystem()
+
         simulateRealTimeUpdates()
     }
 
