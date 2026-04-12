@@ -103,4 +103,59 @@
             android:gravity="center"/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnDoorLock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnSummon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:text="LOCK DOORS"
+        android:backgroundTint="#424242"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="6dp" />
+
+    <Button
+        android:id="@+id/btnSummon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomPanel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="SUMMON CAR"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="6dp" />
+
+    <LinearLayout
+        android:id="@+id/destinationPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertBanner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#E6FFFFFF"
+        android:padding="8dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/tvDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="Tap and hold map to set destination"/>
+
+        <TextView
+            android:id="@+id/tvRouteInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:textColor="#0055FF"
+            android:textStyle="bold"
+            android:text="Route: -- | ETA: --"/>
+    </LinearLayout>
 </RelativeLayout>
