@@ -103,4 +103,160 @@
             android:gravity="center"/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnEmergencyStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertBanner"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="E-STOP"
+        android:backgroundTint="#B71C1C"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnTripHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertBanner"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:text="HISTORY"
+        android:backgroundTint="#607D8B"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnEfficiency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnTripHistory"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="EFFICIENCY"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnIncidentReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnEfficiency"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="INCIDENTS"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnExportData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnIncidentReport"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="EXPORT DATA"
+        android:backgroundTint="#00BCD4"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnDoorLock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnSummon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:text="LOCK DOORS"
+        android:backgroundTint="#424242"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="6dp" />
+
+    <LinearLayout
+        android:id="@+id/tripDetailsPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnDoorLock"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:background="#E6000000"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:elevation="8dp">
+
+        <TextView
+            android:id="@+id/tvTripDetailStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:text="Past Trip Details..." />
+
+        <Button
+            android:id="@+id/btnCloseTripDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="CLOSE HISTORY"
+            android:backgroundTint="#757575"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSummon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomPanel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="SUMMON CAR"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="6dp" />
+
+    <LinearLayout
+        android:id="@+id/destinationPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertBanner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#E6FFFFFF"
+        android:padding="8dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/tvDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="Tap and hold map to set destination"/>
+
+        <TextView
+            android:id="@+id/tvRouteInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:textColor="#0055FF"
+            android:textStyle="bold"
+            android:text="Route: -- | ETA: --"/>
+    </LinearLayout>
 </RelativeLayout>
