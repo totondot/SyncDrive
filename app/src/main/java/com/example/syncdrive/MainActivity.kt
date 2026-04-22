@@ -83,6 +83,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnExportData: Button
     private lateinit var exportController: ExportController
 
+    // Feature 16 Variables
+    private lateinit var btnMaintenance: Button
+    private lateinit var maintenanceController: MaintenanceController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Configuration.getInstance().userAgentValue = packageName
@@ -181,6 +185,11 @@ class MainActivity : AppCompatActivity() {
         exportController = ExportController(btnExportData, tripHistoryController)
         exportController.setupExportButton()
 
+        // Setup Feature 16 (Maintenance Scheduling)
+        btnMaintenance = findViewById(R.id.btnMaintenance)
+        maintenanceController = MaintenanceController(btnMaintenance)
+        maintenanceController.setupMaintenanceButton()
+
         // Start mock data stream
         simulateRealTimeUpdates()
     }
@@ -229,5 +238,12 @@ class MainActivity : AppCompatActivity() {
         
         // Scroll to the newest item
         rvSignFeed.scrollToPosition(0)
+
+        // Mock Feature 16 (Simulating the car's odometer)
+        // First, check the current mileage (starts at 50,000)
+        maintenanceController.updateOdometerAndCheckTasks(50000.0)
+
+        // Uncomment the line below AFTER you schedule a "Tire Rotation" to test the alert!
+        // maintenanceController.updateOdometerAndCheckTasks(60001.0)
     }
 }
