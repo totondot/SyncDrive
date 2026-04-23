@@ -49,4 +49,13 @@ class RouteController(
         mapView.overlays.add(routeLine)
         mapView.invalidate() // Force map to refresh
     }
+    // Add this to RouteController.kt for Feature 10
+    fun clearRoute() {
+        routeLine?.let {
+            mapView.overlays.remove(it)
+            routeLine = null
+        }
+        tvRouteInfo.text = "Route: Canceled | ETA: --"
+        mapView.invalidate()
+    }
 }
