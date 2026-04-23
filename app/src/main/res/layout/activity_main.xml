@@ -230,6 +230,20 @@
         android:elevation="8dp" />
 
     <Button
+        android:id="@+id/btnClimateControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnRestrictions"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="CLIMATE"
+        android:backgroundTint="#03A9F4"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
         android:id="@+id/btnDoorLock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

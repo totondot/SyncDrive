@@ -99,6 +99,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRestrictions: Button
     private lateinit var restrictionsController: RestrictionsController
 
+    // Feature 20 Variables
+    private lateinit var btnClimateControl: Button
+    private lateinit var climateController: ClimateController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Configuration.getInstance().userAgentValue = packageName
@@ -233,6 +237,11 @@ class MainActivity : AppCompatActivity() {
         btnRestrictions = findViewById(R.id.btnRestrictions)
         restrictionsController = RestrictionsController(btnRestrictions)
         restrictionsController.setupRestrictionsButton()
+
+        // Setup Feature 20 (Remote Climate Control)
+        btnClimateControl = findViewById(R.id.btnClimateControl)
+        climateController = ClimateController(btnClimateControl)
+        climateController.setupClimateButton()
 
         // Start mock data stream
         simulateRealTimeUpdates()
