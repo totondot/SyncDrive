@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSignFeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomPanel"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:orientation="horizontal" />
+    <LinearLayout
+        android:id="@+id/topStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:background="#CC000000"
+        android:padding="16dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/tvBatteryStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Battery: --%"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tvRangeStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Range: -- km"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/alertBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topStatusBar"
+        android:background="#DDFF0000"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvAlertMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="WARNING MESSAGE HERE"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:background="#CC000000"
+        android:padding="20dp"
+        android:weightSum="2"
+        android:id="@+id/bottomPanel">
+
+        <TextView
+            android:id="@+id/tvSpeed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0 km/h"
+            android:textColor="#00FF00"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tvHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Heading: --"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnEmergencyStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertBanner"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="E-STOP"
+        android:backgroundTint="#B71C1C"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnTripHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertBanner"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:text="HISTORY"
+        android:backgroundTint="#607D8B"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnEfficiency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnTripHistory"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="EFFICIENCY"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnIncidentReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnEfficiency"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="INCIDENTS"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnExportData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnIncidentReport"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="EXPORT DATA"
+        android:backgroundTint="#00BCD4"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnMaintenance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnExportData"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="MAINTENANCE"
+        android:backgroundTint="#3F51B5"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnSystemCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnMaintenance"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="SYSTEM CHECK"
+        android:backgroundTint="#607D8B"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnServiceLog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnSystemCheck"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="SERVICE LOG"
+        android:backgroundTint="#795548"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnRestrictions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnServiceLog"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="RESTRICTIONS"
+        android:backgroundTint="#9C27B0"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnDoorLock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnSummon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:text="LOCK DOORS"
+        android:backgroundTint="#424242"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="6dp" />
+
+    <LinearLayout
+        android:id="@+id/tripDetailsPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnDoorLock"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:background="#E6000000"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:elevation="8dp">
+
+        <TextView
+            android:id="@+id/tvTripDetailStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:text="Past Trip Details..." />
+
+        <Button
+            android:id="@+id/btnCloseTripDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="CLOSE HISTORY"
+            android:backgroundTint="#757575"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSummon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomPanel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="SUMMON CAR"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="6dp" />
+
+    <LinearLayout
+        android:id="@+id/destinationPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertBanner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="#E6FFFFFF"
+        android:padding="8dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/tvDestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="Tap and hold map to set destination"/>
+
+        <TextView
+            android:id="@+id/tvRouteInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:textColor="#0055FF"
+            android:textStyle="bold"
+            android:text="Route: -- | ETA: --"/>
+    </LinearLayout>
+</RelativeLayout>
