@@ -216,6 +216,34 @@
         android:elevation="8dp" />
 
     <Button
+        android:id="@+id/btnRestrictions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnServiceLog"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="RESTRICTIONS"
+        android:backgroundTint="#607D8B"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
+        android:id="@+id/btnClimateControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnRestrictions"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="CLIMATE"
+        android:backgroundTint="#3F51B5"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="8dp" />
+
+    <Button
         android:id="@+id/btnDoorLock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -242,7 +270,7 @@
         android:elevation="8dp">
 
         <TextView
-            android:id="@+id/tvTripDetailStats"
+            android:id="@+id/tvTripStats"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
@@ -250,7 +278,7 @@
             android:text="Past Trip Details..." />
 
         <Button
-            android:id="@+id/btnCloseTripDetail"
+            android:id="@+id/btnCloseDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

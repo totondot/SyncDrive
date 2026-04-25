@@ -3,10 +3,13 @@ package com.example.syncdrive
 import android.widget.Button
 import android.widget.Toast
 import android.app.AlertDialog
+import org.json.JSONObject
+
 
 class EmergencyController(
     private val btnEmergencyStop: Button,
-    private val routeController: RouteController // Needed to cancel active routes
+    private val routeController: RouteController,
+    private val vehicleConnection: VehicleConnectionManager // PASSED IN NOW
 ) {
     fun setupEmergencySystem() {
         btnEmergencyStop.setOnClickListener {
@@ -22,19 +25,19 @@ class EmergencyController(
                 .show()
         }
     }
-
     private fun executeEmergencyStop() {
-        // 2. Create the Command Model (Simulating network payload to car brakes)
         val command = EmergencyCommand()
-
-        // 3. Clear the active route off the map
         routeController.clearRoute()
 
-        // 4. Visual Feedback
-        Toast.makeText(
-            btnEmergencyStop.context,
-            "CRITICAL: Vehicle Halting!",
-            Toast.LENGTH_LONG
-        ).show()
+        val commandJson = JSONObject().apply {
+            put("emergencyHalt", command.emergencyHalt)
+            put("reason", command.reason)
+            put("timestamp", command.timestamp)
+        }.toString()
+
+        // NEW: SEND THE REAL-TIME PACKET TO THE CAR'S BRAKES
+        vehicleConnection.sendCommandToCar("EMERGENCY_HALT", commandJson)
+
+        Toast.makeText(btnEmergencyStop.context, "CRITICAL: Vehicle Halting!", Toast.LENGTH_LONG).show()
     }
 }
