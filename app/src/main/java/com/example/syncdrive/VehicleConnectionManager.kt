@@ -44,6 +44,28 @@ class VehicleConnectionManager {
 
                     val statJson = json.getJSONObject("status")
                     listener.onStatusUpdated(VehicleStatus(statJson.getInt("battery"), 100.0))
+                } else if (json.getString("type") == "DIAGNOSTICS_UPDATE") {
+                    val diagJson = json.getJSONObject("diagnostics")
+                    val tirePressure = mutableListOf<Double>()
+                    val tires = diagJson.getJSONArray("tire_pressure")
+                    for (i in 0 until tires.length()) {
+                        tirePressure.add(tires.getDouble(i))
+                    }
+                    listener.onDiagnosticsUpdated(
+                        VehicleDiagnostics(
+                            diagJson.getDouble("engine_temp"),
+                            tirePressure,
+                            diagJson.getBoolean("sensors_online")
+                        )
+                    )
+                } else if (json.getString("type") == "SIGN_DETECTED") {
+                    val signJson = json.getJSONObject("sign")
+                    listener.onNewSignDetected(
+                        DetectedSign(
+                            signJson.getString("name"),
+                            System.currentTimeMillis()
+                        )
+                    )
                 }
             }
 
