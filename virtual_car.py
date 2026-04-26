@@ -124,7 +124,12 @@ async def handle_client(websocket):
             else:
                 print(f"   [WARN] Unknown command received: {action}")
 
-    await asyncio.gather(broadcast_telemetry(), listen_for_commands())
+    try:
+        await asyncio.gather(broadcast_telemetry(), listen_for_commands())
+    except websockets.exceptions.ConnectionClosed:
+        print("[APP] Disconnected")
+    except Exception as exc:
+        print(f"[ERROR] Unexpected websocket error: {exc}")
 
 
 async def main():
