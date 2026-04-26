@@ -91,7 +91,9 @@ async def handle_client(websocket):
             elif action == "SET_LOCATION":
                 car.lat = payload.get("lat", car.lat)
                 car.lon = payload.get("lon", car.lon)
-                print(f"   [GPS] Car teleported to: {car.lat}, {car.lon}")
+                car.is_moving = False
+                car.speed_kmh = 0
+                print(f"   [GPS] Car teleported to: {car.lat}, {car.lon} and is in PARK.")
 
             elif action == "SET_DESTINATION":
                 car.is_moving = True
