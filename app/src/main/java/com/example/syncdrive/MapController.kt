@@ -37,22 +37,23 @@ class MapController(private val mapView: MapView) {
     private var locationOverlay: MyLocationNewOverlay? = null
 
     // Call this to turn on the device's GPS blue dot
-    fun enableUserLocation() {
+    fun enableUserLocation(onLocationFound: ((GeoPoint) -> Unit)? = null) {
         val provider = GpsMyLocationProvider(mapView.context)
         locationOverlay = MyLocationNewOverlay(provider, mapView)
         locationOverlay?.enableMyLocation()
 
-        // 1. Tell the map to actively follow the user
         locationOverlay?.enableFollowLocation()
 
-        // 2. Wait for the GPS to get a lock, then fly the camera to that spot
         locationOverlay?.runOnFirstFix {
-            // runOnFirstFix runs on a background thread, so we must post back to the UI thread
             mapView.post {
                 val myLocation = locationOverlay?.myLocation
                 if (myLocation != null) {
                     mapView.controller.animateTo(myLocation)
-                    mapView.controller.setZoom(18.0) // Zoom in close!
+                    mapView.controller.setZoom(18.0)
+
+                    // NEW: Pass the GPS coordinates back to the callback!
+                    val userPoint = GeoPoint(myLocation.latitude, myLocation.longitude)
+                    onLocationFound?.invoke(userPoint)
                 }
             }
         }

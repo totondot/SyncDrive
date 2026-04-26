@@ -20,6 +20,25 @@ import androidx.core.content.ContextCompat
 // Implement the VehicleDataListener to receive real-time data
 class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataListener {
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Pass the callback to send the command
+            mapController.enableUserLocation { userPoint ->
+                syncCarToUserLocation(userPoint)
+            }
+        } else {
+            Toast.makeText(this, "GPS permission is required to show your location.", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // Helper function to send the command
+    private fun syncCarToUserLocation(point: GeoPoint) {
+        val payload = """{"lat": ${point.latitude}, "lon": ${point.longitude}}"""
+        vehicleConnection.sendCommandToCar("SET_LOCATION", payload)
+    }
+
     // Core Map & Dashboard Views (Features 1-5)
     private lateinit var mapView: MapView
     private lateinit var mapController: MapController
@@ -93,22 +112,12 @@ class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataLi
     // NEW: Real-Time Connection Manager
     private lateinit var vehicleConnection: VehicleConnectionManager
 
-    // Handles the result of the permission request dialog
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            mapController.enableUserLocation()
-        } else {
-            Toast.makeText(this, "GPS permission is required to show your location.", Toast.LENGTH_LONG).show()
-        }
-    }
+    // Stores the most recent location
+    private var latestCarLocation: GeoPoint? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Configure OSMDroid before inflating the layout
-        Configuration.getInstance().load(applicationContext, getSharedPreferences("osmdroid", MODE_PRIVATE))
         setContentView(R.layout.activity_main)
 
         // --- 1. UI INITIALIZATION & CONTROLLER SETUP ---
@@ -139,6 +148,9 @@ class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataLi
         signFeedAdapter = SignFeedAdapter(mutableListOf())
         rvSignFeed.adapter = signFeedAdapter
 
+        // 🚨 IMPORTANT FIX: Initialize connection early so we can pass it to ALL controllers!
+        vehicleConnection = VehicleConnectionManager()
+
         // Feature 6 & 7: Navigation & Routing
         tvDestination = findViewById(R.id.tvDestination)
         tvRouteInfo = findViewById(R.id.tvRouteInfo)
@@ -146,27 +158,29 @@ class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataLi
 
         // Set up Map Long-Press for Destination
         navigationController = NavigationController(mapView, tvDestination) { destinationPoint ->
-            val currentCarLocation = GeoPoint(37.7749, -122.4194) // Start point for drawing route
-            routeController.calculateAndDrawRoute(currentCarLocation, destinationPoint)
+            // Use the LIVE location if we have it, otherwise fallback to a default
+            val startPoint = latestCarLocation ?: GeoPoint(37.7749, -122.4194)
+            routeController.calculateAndDrawRoute(startPoint, destinationPoint)
+
+            // 🚨 NEW: Send the destination coordinates to Python!
+            val payload = """{"lat": ${destinationPoint.latitude}, "lon": ${destinationPoint.longitude}}"""
+            vehicleConnection.sendCommandToCar("SET_DESTINATION", payload)
         }
         navigationController.enableMapClickToSetDestination()
 
-        // Feature 8: Summon
+        // Feature 8: Summon (Now passing vehicleConnection)
         btnSummon = findViewById(R.id.btnSummon)
-        summonController = SummonController(btnSummon, routeController)
+        summonController = SummonController(btnSummon, routeController, vehicleConnection)
         val mockUserLocation = GeoPoint(37.7755, -122.4180)
         val currentCarLocation = GeoPoint(37.7749, -122.4194)
         summonController.setupSummonButton(currentCarLocation, mockUserLocation)
 
-        // Feature 9: Door Locks
+        // Feature 9: Door Locks (Now passing vehicleConnection)
         btnDoorLock = findViewById(R.id.btnDoorLock)
-        doorController = DoorController(btnDoorLock)
+        doorController = DoorController(btnDoorLock, vehicleConnection)
         doorController.setupDoorControls()
 
-        // Initialize connection early so we can pass it to the Emergency Controller
-        vehicleConnection = VehicleConnectionManager()
-
-        // Feature 10: Emergency Stop (Now accepting the real-time vehicleConnection)
+        // Feature 10: Emergency Stop
         btnEmergencyStop = findViewById(R.id.btnEmergencyStop)
         emergencyController = EmergencyController(btnEmergencyStop, routeController, vehicleConnection)
         emergencyController.setupEmergencySystem()
@@ -203,9 +217,9 @@ class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataLi
         maintenanceController = MaintenanceController(btnMaintenance)
         maintenanceController.setupMaintenanceButton()
 
-        // Feature 17: Pre-ride Checklist
+        // Feature 17: Pre-ride Checklist (Now passing vehicleConnection)
         btnSystemCheck = findViewById(R.id.btnSystemCheck)
-        checklistController = ChecklistController(btnSystemCheck)
+        checklistController = ChecklistController(btnSystemCheck, vehicleConnection)
         checklistController.setupChecklistButton()
 
         // Feature 18: Service Log
@@ -218,15 +232,17 @@ class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataLi
         restrictionsController = RestrictionsController(btnRestrictions)
         restrictionsController.setupRestrictionsButton()
 
-        // Feature 20: Climate Control
+        // Feature 20: Climate Control (Now passing vehicleConnection)
         btnClimateControl = findViewById(R.id.btnClimateControl)
-        climateController = ClimateController(btnClimateControl)
+        climateController = ClimateController(btnClimateControl, vehicleConnection)
         climateController.setupClimateButton()
 
         // Check if GPS permission is already granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            // We have permission, show the blue dot!
-            mapController.enableUserLocation()
+            // We have permission, show the blue dot AND sync the car!
+            mapController.enableUserLocation { userPoint ->
+                syncCarToUserLocation(userPoint)
+            }
         } else {
             // Ask the user for permission
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -255,8 +271,9 @@ class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataLi
     override fun onLocationUpdated(location: VehicleLocation) {
         runOnUiThread {
             mapController.updateVehicleLocationOnMap(location)
-            // Example integration: Update maintenance odometer based on live movement
-            // maintenanceController.updateOdometerAndCheckTasks(currentCalculatedMileage)
+
+            // Save the live location to our variable
+            latestCarLocation = GeoPoint(location.latitude, location.longitude)
         }
     }
 
