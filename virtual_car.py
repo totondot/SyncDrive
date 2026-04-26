@@ -1,8 +1,6 @@
 import asyncio
 import json
 import math
-import os
-
 try:
     import websockets
 except ModuleNotFoundError as exc:
@@ -135,11 +133,9 @@ async def handle_client(websocket):
 
 
 async def main():
-    print("[CAR] Virtual Car Engine Started in the Cloud...")
+    print("[CAR] Virtual Car Engine Started locally on port 8766...")
 
-    port = int(os.environ.get("PORT", 8765))
-
-    async with websockets.serve(handle_client, "0.0.0.0", port):
+    async with websockets.serve(handle_client, "0.0.0.0", 8766):
         await asyncio.Future()
 
 
