@@ -24,7 +24,7 @@ class VehicleConnectionManager {
         this.listener = listener
 
         // REPLACE WITH YOUR COMPUTER'S LOCAL IP ADDRESS
-        val request = Request.Builder().url("ws://192.168.1.1:8765").build()
+        val request = Request.Builder().url("wss://syncdrive.onrender.com").build()
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
