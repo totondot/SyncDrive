@@ -157,14 +157,28 @@ class MainActivity : AppCompatActivity(), VehicleConnectionManager.VehicleDataLi
         routeController = RouteController(mapView, tvRouteInfo)
 
         // Set up Map Long-Press for Destination
-        navigationController = NavigationController(mapView, tvDestination) { destinationPoint ->
-            // Use the LIVE location if we have it, otherwise fallback to a default
-            val startPoint = latestCarLocation ?: GeoPoint(37.7749, -122.4194)
-            routeController.calculateAndDrawRoute(startPoint, destinationPoint)
+        navigationController = NavigationController(mapView, findViewById(R.id.tvDestination)) { destinationPoint ->
+            latestCarLocation?.let { carLoc ->
 
-            // 🚨 NEW: Send the destination coordinates to Python!
-            val payload = """{"lat": ${destinationPoint.latitude}, "lon": ${destinationPoint.longitude}}"""
-            vehicleConnection.sendCommandToCar("SET_DESTINATION", payload)
+                // 1. Calculate the route, and wait for the points to be ready
+                routeController.calculateAndDrawRoute(carLoc, destinationPoint) { routePoints ->
+
+                    // 2. Convert the list of map points into a JSON Array
+                    val jsonPoints = org.json.JSONArray()
+                    routePoints.forEach { pt ->
+                        val ptObj = org.json.JSONObject()
+                        ptObj.put("lat", pt.latitude)
+                        ptObj.put("lon", pt.longitude)
+                        jsonPoints.put(ptObj)
+                    }
+
+                    // 3. Create the payload and send the NEW command
+                    val payloadJson = org.json.JSONObject()
+                    payloadJson.put("points", jsonPoints)
+
+                    vehicleConnection.sendCommandToCar("SET_ROUTE", payloadJson.toString())
+                }
+            }
         }
         navigationController.enableMapClickToSetDestination()
 

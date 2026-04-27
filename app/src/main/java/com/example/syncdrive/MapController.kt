@@ -42,8 +42,6 @@ class MapController(private val mapView: MapView) {
         locationOverlay = MyLocationNewOverlay(provider, mapView)
         locationOverlay?.enableMyLocation()
 
-        locationOverlay?.enableFollowLocation()
-
         locationOverlay?.runOnFirstFix {
             mapView.post {
                 val myLocation = locationOverlay?.myLocation
@@ -51,7 +49,7 @@ class MapController(private val mapView: MapView) {
                     mapView.controller.animateTo(myLocation)
                     mapView.controller.setZoom(18.0)
 
-                    // NEW: Pass the GPS coordinates back to the callback!
+                    // Pass the GPS coordinates back to the callback!
                     val userPoint = GeoPoint(myLocation.latitude, myLocation.longitude)
                     onLocationFound?.invoke(userPoint)
                 }
@@ -59,6 +57,5 @@ class MapController(private val mapView: MapView) {
         }
 
         mapView.overlays.add(locationOverlay)
-        mapView.invalidate()
     }
 }

@@ -16,8 +16,11 @@ class RouteController(
     private var routeLine: Polyline? = null
     private val client = OkHttpClient()
 
-    fun calculateAndDrawRoute(startLocation: GeoPoint, destination: GeoPoint) {
-        // Build the URL for the free OSRM public API
+    fun calculateAndDrawRoute(
+        startLocation: GeoPoint,
+        destination: GeoPoint,
+        onRouteReady: ((List<GeoPoint>) -> Unit)? = null // 👈 NEW: Optional callback
+    ) { // Build the URL for the free OSRM public API
         // Format: longitude,latitude (OSRM requires longitude first!)
         val url = "https://router.project-osrm.org/route/v1/driving/" +
                 "${startLocation.longitude},${startLocation.latitude};" +
@@ -78,6 +81,7 @@ class RouteController(
 
                                 mapView.overlays.add(routeLine)
                                 mapView.invalidate() // Refresh map
+                                onRouteReady?.invoke(routePoints)
                             }
                         }
                     } catch (e: Exception) {
